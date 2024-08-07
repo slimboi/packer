@@ -20,7 +20,7 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v3
 
-      - name: Setup AWS CLI
+      - name: Configure AWS credentials
         uses: aws-actions/configure-aws-cli@v2
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -33,8 +33,9 @@ jobs:
       - name: Install Packer
         run: |
           sudo apt-get update
-          sudo apt-get install -y unzip
-          curl -Lo packer.zip https://releases.hashicorp.com/packer/latest/packer_linux_amd64.zip
+          sudo apt-get install -y unzip jq
+          PACKER_LATEST_VERSION=$(curl -s https://api.github.com/repos/hashicorp/packer/releases/latest | jq -r .tag_name)
+          curl -Lo packer.zip https://releases.hashicorp.com/packer/${PACKER_LATEST_VERSION}/packer_${PACKER_LATEST_VERSION}_linux_amd64.zip
           unzip packer.zip
           sudo mv packer /usr/local/bin/
           packer --version
