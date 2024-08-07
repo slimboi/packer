@@ -1,0 +1,49 @@
+name: AWS AMI Build
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Setup AWS CLI
+        uses: aws-actions/configure-aws-cli@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-west-2  # Change to your desired region
+
+      - name: List S3 Buckets
+        run: aws s3 ls
+
+      - name: Install Packer
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y unzip
+          curl -Lo packer.zip https://releases.hashicorp.com/packer/latest/packer_linux_amd64.zip
+          unzip packer.zip
+          sudo mv packer /usr/local/bin/
+          packer --version
+
+      - name: Initialize Packer
+        run: packer init aws-ami-v1.pkr.hcl
+
+      - name: Build AMI
+        run: packer build aws-ami-v1.pkr.hcl
+
+      - name: Clean Up Workspace
+        run: rm -rf *  # Clean workspace by removing all files
