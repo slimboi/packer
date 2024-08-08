@@ -42,14 +42,14 @@
       debug:
         var: cloudwatch_status.stdout
 
-    - name: Install AWS Inspector
-      get_url:
-        url: https://inspector-agent.amazonaws.com/linux/latest/install
-        dest: /tmp/install_inspector.sh
-        mode: '0755'
+    # - name: Install AWS Inspector
+    #  get_url:
+    #    url: https://inspector-agent.amazonaws.com/linux/latest/install
+    #    dest: /tmp/install_inspector.sh
+     #   mode: '0755'
 
-    - name: Run AWS Inspector installation script
-      command: bash /tmp/install_inspector.sh
+    # - name: Run AWS Inspector installation script
+    #  command: bash /tmp/install_inspector.sh
 
     - name: Install Docker
       yum:
