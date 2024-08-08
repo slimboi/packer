@@ -29,6 +29,7 @@
       yum:
         name: https://s3.amazonaws.com/amazoncloudwatch-agent/amazon_linux/amd64/latest/amazon-cloudwatch-agent.rpm
         state: present
+        disable_gpg_check: yes
 
     - name: Start CloudWatch Agent
       command: /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -m ec2 -a start
