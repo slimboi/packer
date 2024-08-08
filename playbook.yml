@@ -17,7 +17,7 @@
       yum:
         name: https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/linux_amd64/amazon-ssm-agent.rpm
         state: present
-        gpgcheck: no
+        disable_gpg_check: yes
 
     - name: Start and enable SSM Agent
       systemd:
