@@ -42,6 +42,30 @@
       debug:
         var: cloudwatch_status.stdout
 
+    - name: Ensure AWS CLI is installed
+      package:
+        name: awscli
+        state: present
+
+    - name: Configure AWS CLI
+      command: aws configure
+      args:
+        creates: /root/.aws/config
+
+    - name: Download AWS Inspector agent installer
+      get_url:
+        url: https://inspector-agent.amazonaws.com/linux/latest/install
+        dest: /tmp/install
+
+    - name: Install AWS Inspector agent
+      command: bash /tmp/install
+
+    - name: Start AWS Inspector agent
+      service:
+        name: awsagent
+        state: started
+        enabled: yes
+
     # - name: Install AWS Inspector
     #  get_url:
     #    url: https://inspector-agent.amazonaws.com/linux/latest/install
