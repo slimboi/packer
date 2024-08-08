@@ -13,12 +13,9 @@
         name: git
         state: present
 
-    - name: Enable Amazon Linux Extras
-      command: amazon-linux-extras install epel -y
-
-    - name: Install SSM Agent using Amazon Linux Extras
+    - name: Install SSM Agent
       yum:
-        name: amazon-ssm-agent
+        name: https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/linux_amd64/amazon-ssm-agent.rpm
         state: present
 
     - name: Start and enable SSM Agent
@@ -26,6 +23,7 @@
         name: amazon-ssm-agent
         state: started
         enabled: yes
+        gpgcheck: no
 
     - name: Install CloudWatch Agent
       yum:
