@@ -13,14 +13,12 @@
         name: git
         state: present
 
-    - name: Import GPG key for SSM Agent
-      rpm_key:
-        state: present
-        key: https://amazon-ssm-agent.s3.amazonaws.com/latest/linux_amd64/gpgkey
+    - name: Enable Amazon Linux Extras
+      command: amazon-linux-extras install epel -y
 
-    - name: Install SSM Agent
+    - name: Install SSM Agent using Amazon Linux Extras
       yum:
-        name: https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/linux_amd64/amazon-ssm-agent.rpm
+        name: amazon-ssm-agent
         state: present
 
     - name: Start and enable SSM Agent
